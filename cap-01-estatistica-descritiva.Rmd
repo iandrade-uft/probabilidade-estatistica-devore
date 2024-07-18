@@ -20,8 +20,52 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
+source("src/descritiva.R")
 ```
+
+
+```{r}
+x <- c(74, 89, 80, 93, 64, 67, 72, 70, 66, 85, 89, 81, 81,
+71, 74, 82, 85, 63, 72, 81, 81, 95, 84, 81, 80, 70,
+69, 66, 60, 83, 85, 98, 84, 68, 90, 82, 69, 72, 87, 88)
+
+tikz <- draw_stemleaf_plot(
+  x, lowhi = TRUE, 
+  main="Caule e folha do número do peso de alunos", 
+  clab="Dígitos das dezenas", 
+  flab="Dígitos das unidades"
+)
+
+x2 <- sample(x=20:30, size=200, replace=TRUE)
+tikz2 <- draw_dots_plot(x2, lab="Temperatura")
+
+tikz3 <- draw_histogram(x2, x_scale=1, y_scale=0.5, lab="Histograma", x_skip=2, y_skip=5)
+```
+
+\begin{figure}[H]
+  \centering
+  `r tikz`
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  `r tikz2`
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  `r tikz3`
+\end{figure}
+
+
+
+
+
+
+
+
+
+
 
 \begin{enumerate}
   \item \textbf{(FEI-SP)} Dois móveis $A$ e $B$, ambos com movimento uniforme, percorrem uma trajetória retilínea conforme mostra a figura. Em $t = 0$, estes se encontram, respectivamente, nos pontos $A$ e $B$ na trajetória. As velocidades dos móveis são $v_A = 50$ m/s e $v_B = 30$ m/s no mesmo sentido.
