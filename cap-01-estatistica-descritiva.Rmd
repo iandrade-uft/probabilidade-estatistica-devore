@@ -3,14 +3,15 @@ title: "Título"
 author: "Igo da Costa Andrade"
 
 # Metadados
-booktitle: "Título do Livro"
-booksubtitle: "Subtítulo do Livro"
-bookauthors: "Autor, A.B"
-bookaddres: "Local"
-bookpublisher: "Editora"
-bookyear: "2000"
-chaptertitle: "Usando código R"
+booktitle: "Probabilidade e Estatística para Engenharia e Ciências"
+#booksubtitle: "Subtítulo do Livro"
+bookauthors: "Devore, J. L."
+bookaddres: "São Paulo"
+bookpublisher: "Cengage"
+bookyear: "2006"
+chaptertitle: "Visão geral e estatística descritiva"
 chapternumber: "1"
+maincolor: "3e608a"
 
 output: 
   bookdown::pdf_document2:
@@ -19,8 +20,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(reticulate)
-use_python("~/anaconda3/envs/science/bin/python")
+
 ```
 
 \begin{enumerate}
@@ -76,60 +76,57 @@ use_python("~/anaconda3/envs/science/bin/python")
   \end{align*}
   
   
-  O script \verb|Python| abaixo mostra o resultano numérico correspondente ao desenvolvimento algébrico acima:
+  O script \verb|R| abaixo mostra o resultano numérico correspondente ao desenvolvimento algébrico acima:
 \end{enumerate}
 
-```{python}
+```{r problema-1}
 # Dados do problema
-s_0A = 50
-v_A = 50
-s_0B = 150
-v_B = 30
+s_0A <- 50
+v_A <- 50
+s_0B <- 150
+v_B <- 30
 
 # Instante do encontro
-t_star = (s_0B - s_0A) / (v_A - v_B)
+t_star <- (s_0B - s_0A) / (v_A - v_B)
 
 # Posição do encontro
-s_star = s_0A + v_A * t_star
+s_star <- s_0A + v_A * t_star
 ```
 
 
-  Os móveis encontram-se no instante $t^{*} = `r format(py$t_star, decimal.mark=",")`$ s e na posição $s^{*} = `r format(py$s_star, decimal.mark=",")`$ m.
+  Os móveis encontram-se no instante $t^{*} = `r format(t_star, decimal.mark=",")`$ s e na posição $s^{*} = `r format(s_star, decimal.mark=",")`$ m.
   
 
   O gráfico abaixo mostra a posição de cada móvel em função do tempo, bem como o ponto de encontro.
   
-```{python, include=FALSE}
-import numpy as np
-t = np.array([0, t_star, 1.5*t_star])
-s_A = s_0A + v_A * t
-s_B = s_0B + v_B * t
+```{r, include=FALSE}
+t <- c(0, t_star, 1.5*t_star)
+s_A <- s_0A + v_A * t
+s_B <- s_0B + v_B * t
 
-t_lim = [np.min(t)-t_star/3, np.max(t)+t_star/2]
-s_lim = [-s_0A, np.max([np.max(s_A), np.max(s_B)]) + s_0A]
+t_lim <- c(min(t)-t_star/3, max(t)+t_star/2)
+s_lim <- c(-s_0A, max(c(s_A, s_B)) + s_0A)
 ```
 
 \begin{figure}[H]
   \centering
   \begin{tikzpicture}[x=0.5cm, y=0.01cm]
     % Eixo X
-    \draw[-latex] (`r py$t_lim[1]`, 0) -- (`r py$t_lim[2]`, 0) node[below] {$t$ (s)};
+    \draw[-latex] (`r t_lim[1]`, 0) -- (`r t_lim[2]`, 0) node[below] {$t$ (s)};
     % Eixo Y
-    \draw[-latex] (0, `r py$s_lim[1]`) -- (0, `r py$s_lim[2]`) node[left] {$s$ (m)};
+    \draw[-latex] (0, `r s_lim[1]`) -- (0, `r s_lim[2]`) node[left] {$s$ (m)};
     % Função Horária de A
-    \draw[red, thick] (`r py$t[1]`, `r py$s_A[1]`) -- (`r py$t[3]`, `r py$s_A[3]`) node[right, yshift=5pt, black] {$\textbf{A}$};
-    \draw[thick] (4pt, `r py$s_0A`) -- (-4pt, `r py$s_0A`) node[left] {$`r py$s_0A`$};
+    \draw[red, thick] (`r t[1]`, `r s_A[1]`) -- (`r t[3]`, `r s_A[3]`) node[right, yshift=5pt, black] {$\textbf{A}$};
+    \draw[thick] (4pt, `r s_0A`) -- (-4pt, `r s_0A`) node[left] {$`r s_0A`$};
     % Função Horária de B
-    \draw[blue, thick] (`r py$t[1]`, `r py$s_B[1]`) -- (`r py$t[3]`, `r py$s_B[3]`) node[right, yshift=-2pt , black] {$\textbf{B}$};
-    \draw[thick] (4pt, `r py$s_0B`) -- (-4pt, `r py$s_0B`) node[left] {$`r py$s_0B`$};
+    \draw[blue, thick] (`r t[1]`, `r s_B[1]`) -- (`r t[3]`, `r s_B[3]`) node[right, yshift=-2pt , black] {$\textbf{B}$};
+    \draw[thick] (4pt, `r s_0B`) -- (-4pt, `r s_0B`) node[left] {$`r s_0B`$};
     % Ponto de encontro
-    \draw[dashed] (`r py$t_star`, 0) -- (`r py$t_star`, `r py$s_star`) -- (0, `r py$s_star`);
-    \draw[thick] (`r py$t_star`, 4pt) -- (`r py$t_star`, -4pt) node[below] {$t^{*} = `r py$t_star`$};
-    \draw[thick] (4pt, `r py$s_star`) -- (-4pt, `r py$s_star`) node[left] {$`r py$s_star`$};
+    \draw[dashed] (`r t_star`, 0) -- (`r t_star`, `r s_star`) -- (0, `r s_star`);
+    \draw[thick] (`r t_star`, 4pt) -- (`r t_star`, -4pt) node[below] {$t^{*} = `r t_star`$};
+    \draw[thick] (4pt, `r s_star`) -- (-4pt, `r s_star`) node[left] {$`r s_star`$};
   \end{tikzpicture}
 \end{figure}
-
-
 
 Portanto, a resposta correta é letra \textbf{D}.
 
