@@ -1,0 +1,136 @@
+---
+title: "Título"
+author: "Igo da Costa Andrade"
+
+# Metadados
+booktitle: "Título do Livro"
+booksubtitle: "Subtítulo do Livro"
+bookauthors: "Autor, A.B"
+bookaddres: "Local"
+bookpublisher: "Editora"
+bookyear: "2000"
+chaptertitle: "Usando código R"
+chapternumber: "1"
+
+output: 
+  bookdown::pdf_document2:
+    template: template.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+use_python("~/anaconda3/envs/science/bin/python")
+```
+
+\begin{enumerate}
+  \item \textbf{(FEI-SP)} Dois móveis $A$ e $B$, ambos com movimento uniforme, percorrem uma trajetória retilínea conforme mostra a figura. Em $t = 0$, estes se encontram, respectivamente, nos pontos $A$ e $B$ na trajetória. As velocidades dos móveis são $v_A = 50$ m/s e $v_B = 30$ m/s no mesmo sentido.
+  
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+      \draw[-latex] (-0.5, 0) -- (8, 0);
+      \foreach \i/\x/\y/\cor in {0/0/2/black, A/2/1.5/red, B/6/2/red}{
+        \draw[dashed] (\x, 0) -- (\x, \y);
+        \draw[\cor, thick] (\x, 0.1) -- (\x, -0.1) node[below, black] {$\i$};
+      }
+      \foreach \i/\x/\y in {50/2/1.5, 150/6/2}{
+        \draw[latex-latex] (0, \y) -- (\x, \y) node[midway, above] {$\i$ m};
+      }
+    \end{tikzpicture}
+  \end{figure}
+  
+  Em que instante a distância entre os dois móveis será 50 m?
+  \begin{enumerate}[label=(\alph*)]
+    \foreach \resp in {200, 225, 250, 300, 350} {
+      \item $\resp$ m
+    }
+  \end{enumerate}
+  
+  \iniSol
+  
+
+
+  
+  Escrevamos as equações horárias das trajétórias dos móveis $A$ e $B$, sabendo que ambos descrevem movimento uniforme:
+  
+  \begin{align*}
+    \begin{cases}
+      s_A = s_{0A} + v_A t\\
+      s_B = s_{0B} + v_B t\\
+    \end{cases}
+  \end{align*}
+  
+  Os móveis encontram-se no instante $t^{*}$ tal que $s_A = s_B = s^{*}$, ou seja:
+  \begin{align*}
+    s_A = s_B &\Rightarrow s_{0A} + v_A t^{*} = s_{0B} + v_B t^{*}\\
+    &\Rightarrow v_A t^{*} - v_B t^{*} = s_{0B} - s_{0A}\\
+    &\Rightarrow (v_A  - v_B) t^{*} = s_{0B} - s_{0A}\\
+    &\Rightarrow t^{*} = \dfrac{s_{0B} - s_{0A}}{v_A  - v_B}
+  \end{align*}
+  
+  Nesse instante, a posição $s^{*}$ dos móveis será:
+  
+  \begin{align*}
+    s^{*} = s_{0A} + v_A t^{*} \Rightarrow s^{*} = s_{0A} + v_A \left( \dfrac{s_{0B} - s_{0A}}{v_A  - v_B} \right)
+  \end{align*}
+  
+  
+  O script \verb|Python| abaixo mostra o resultano numérico correspondente ao desenvolvimento algébrico acima:
+\end{enumerate}
+
+```{python}
+# Dados do problema
+s_0A = 50
+v_A = 50
+s_0B = 150
+v_B = 30
+
+# Instante do encontro
+t_star = (s_0B - s_0A) / (v_A - v_B)
+
+# Posição do encontro
+s_star = s_0A + v_A * t_star
+```
+
+
+  Os móveis encontram-se no instante $t^{*} = `r format(py$t_star, decimal.mark=",")`$ s e na posição $s^{*} = `r format(py$s_star, decimal.mark=",")`$ m.
+  
+
+  O gráfico abaixo mostra a posição de cada móvel em função do tempo, bem como o ponto de encontro.
+  
+```{python, include=FALSE}
+import numpy as np
+t = np.array([0, t_star, 1.5*t_star])
+s_A = s_0A + v_A * t
+s_B = s_0B + v_B * t
+
+t_lim = [np.min(t)-t_star/3, np.max(t)+t_star/2]
+s_lim = [-s_0A, np.max([np.max(s_A), np.max(s_B)]) + s_0A]
+```
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[x=0.5cm, y=0.01cm]
+    % Eixo X
+    \draw[-latex] (`r py$t_lim[1]`, 0) -- (`r py$t_lim[2]`, 0) node[below] {$t$ (s)};
+    % Eixo Y
+    \draw[-latex] (0, `r py$s_lim[1]`) -- (0, `r py$s_lim[2]`) node[left] {$s$ (m)};
+    % Função Horária de A
+    \draw[red, thick] (`r py$t[1]`, `r py$s_A[1]`) -- (`r py$t[3]`, `r py$s_A[3]`) node[right, yshift=5pt, black] {$\textbf{A}$};
+    \draw[thick] (4pt, `r py$s_0A`) -- (-4pt, `r py$s_0A`) node[left] {$`r py$s_0A`$};
+    % Função Horária de B
+    \draw[blue, thick] (`r py$t[1]`, `r py$s_B[1]`) -- (`r py$t[3]`, `r py$s_B[3]`) node[right, yshift=-2pt , black] {$\textbf{B}$};
+    \draw[thick] (4pt, `r py$s_0B`) -- (-4pt, `r py$s_0B`) node[left] {$`r py$s_0B`$};
+    % Ponto de encontro
+    \draw[dashed] (`r py$t_star`, 0) -- (`r py$t_star`, `r py$s_star`) -- (0, `r py$s_star`);
+    \draw[thick] (`r py$t_star`, 4pt) -- (`r py$t_star`, -4pt) node[below] {$t^{*} = `r py$t_star`$};
+    \draw[thick] (4pt, `r py$s_star`) -- (-4pt, `r py$s_star`) node[left] {$`r py$s_star`$};
+  \end{tikzpicture}
+\end{figure}
+
+
+
+Portanto, a resposta correta é letra \textbf{D}.
+
+\fimSol

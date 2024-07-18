@@ -1,0 +1,203 @@
+\documentclass[twoside]{article}
+\usepackage[left=3cm, right=2cm, top=3cm, bottom=2cm]{geometry}
+\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{siunitx}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{float}
+
+\usepackage{tikz}
+%\usetikzlibrary{patterns,snakes}
+
+
+
+% Redefinir o comando \section para ter o mesmo tamanho que \subsection
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+                                     {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                     {2.3ex \@plus.2ex}%
+                                     {\normalfont\large\bfseries}}
+\makeatother
+
+
+% Definir leftmargin=* para todos os ambientes enumerate
+\setlist[enumerate,1]{leftmargin=*, resume, label=\textbf{\arabic*}}
+
+
+
+
+% Metadados
+$if(title)$
+\title{$title$}
+$endif$
+
+$if(author)$
+\author{author}
+$endif$
+
+$if(booktitle)$
+\newcommand{\booktitle}{$booktitle$}
+$else$
+\newcommand{\booktitle}{}
+$endif$
+
+$if(booksubtitle)$
+\newcommand{\booksubtitle}{: $booksubtitle$}
+$else$
+\newcommand{\booksubtitle}{}
+$endif$
+
+
+$if(bookauthors)$
+\newcommand{\bookauthors}{$bookauthors$}
+$else$
+\newcommand{\bookauthors}{}
+$endif$
+
+$if(bookaddres)$
+\newcommand{\bookaddres}{$bookaddres$}
+$else$
+\newcommand{\bookaddres}{}
+$endif$
+
+$if(bookpublisher)$
+\newcommand{\bookpublisher}{$bookpublisher$}
+$else$
+\newcommand{\bookpublisher}{}
+$endif$
+
+$if(bookyear)$
+\newcommand{\bookyear}{$bookyear$}
+$else$
+\newcommand{\bookyear}{}
+$endif$
+
+$if(chaptertitle)$
+\newcommand{\chaptertitle}{$chaptertitle$}
+$else$
+\newcommand{\chaptertitle}{}
+$endif$
+
+$if(chapternumber)$
+\newcommand{\chapternumber}{$chapternumber$}
+$else$
+\newcommand{\chapternumber}{}
+$endif$
+
+% Define a cor principal do arquivo
+$if(maincolor)$
+\definecolor{mainColor}{HTML}{$maincolor$}
+$else$
+\definecolor{mainColor}{HTML}{01796F}
+$endif$
+
+
+
+
+
+% Bold Vector
+\newcommand{\vet}[1]{\mathbf{\hat{#1}}}
+
+% Comando iniciar Solução
+\newcommand{\iniSol}{
+    \noindent\textcolor{mainColor}{\rule{0.3\textwidth}{0.4pt}}\\
+    \noindent\textcolor{mainColor}{\textbf{Solução:}}\\
+}
+
+% Comando finalizar Solução
+\newcommand{\fimSol}{
+    %
+    \hfill\fcolorbox{mainColor}{mainColor}
+
+    
+    \hfill\textcolor{mainColor}{\rule{0.3\textwidth}{0.4pt}}
+}
+
+% Configuração do cabeçalho e rodapé
+\pagestyle{fancy}
+\fancyhf{} % Limpa os cabeçalhos e rodapés atuais
+
+% Cabeçalho para páginas pares
+\fancyhead[RE]{$author$}
+
+% Cabeçalho para páginas ímpares
+\fancyhead[LO]{
+    $if(booktitle)$
+    Solucionário de 
+    $booktitle$
+    $if(bookauthors)$
+    ($bookauthors$)
+    $endif$
+    $endif$
+}
+
+\fancyhead[RO]{
+    
+}
+
+% Número da página no rodapé (centrado)
+\fancyfoot[C]{\thepage}
+
+% Ajuste para reconhecimento de código python
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+
+% Novo comando para a criação do cabeçalho personalizado
+\newcommand{\makeheader}{
+  \textcolor{mainColor}{\hrule}
+  \vspace{0.25cm}
+  \begin{minipage}[c]{12cm}
+    \begin{center}
+      Resolução de Problemas do Livro\\
+      \vspace{0.25cm}
+      \textcolor{mainColor}{\large{\textbf{$booktitle$$if(booksubtitle)$: $booksubtitle$$endif$ ($bookauthors$)}}}\\
+      \vspace{0.7cm}
+      \small{por}\\
+      \vspace{0.2cm}
+      \textbf{\large{$author$}}
+    \end{center}
+    \vspace{0.25cm}
+    \hrule
+    \vspace{0.25cm}
+    \textbf{Referência}
+  
+    \uppercase{$bookauthors$}. \textbf{$booktitle$}$if(booksubtitle)$: $booksubtitle$$endif$. $bookaddres$, $bookpublisher$, $bookyear$.
+  \end{minipage}
+  \begin{minipage}[c]{4cm}
+    \begin{flushright}
+      \includegraphics[width=0.8\linewidth]{figure/capa.png}    
+    \end{flushright}
+  \end{minipage}
+  \vspace{0.25cm}
+  \textcolor{mainColor}{\hrule}
+  
+  \begin{center}
+    \vspace{0.5cm}
+    $if(chapternumber)$
+    \large{\textbf{Capítulo $chapternumber$: }}
+    $endif$
+    $if(chaptertitle)$
+    \large{\textbf{$chaptertitle$}}
+    $endif$
+    \vspace{0.5cm}
+  \end{center}
+}
+
+
+\begin{document}
+\thispagestyle{empty}
+
+\makeheader
+
+
+$body$
+
+\end{document}
