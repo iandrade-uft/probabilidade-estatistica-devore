@@ -96,7 +96,7 @@ tikz3 <- draw_histogram(x2, x_scale=1, y_scale=0.5, lab="Histograma", x_skip=2, 
 
 
   
-  Escrevamos as equações horárias das trajétórias dos móveis $A$ e $B$, sabendo que ambos descrevem movimento uniforme:
+  Escrevamos was equações horárias das trajétórias dos móveis $A$ e $B$, sabendo que ambos descrevem movimento uniforme:
   
   \begin{align*}
     \begin{cases}
